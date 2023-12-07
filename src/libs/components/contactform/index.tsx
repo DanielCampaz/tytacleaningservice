@@ -4,13 +4,14 @@ import { Button } from "..";
 import useDataService from "../../hooks/useDataServices";
 import { useState } from "react";
 import { useParams } from "next/navigation";
-// import SendEmail from "../../email";
+import { toast } from "sonner";
 
 export interface Inputs {
   fullName: string;
   email: string;
   subject: string;
   message: string;
+  phone: number;
 }
 
 export default function ContactForm() {
@@ -30,14 +31,23 @@ export default function ContactForm() {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    // "use server";
-    // SendEmail(
-    //   data,
-    //   (data) => console.log(data),
-    //   (error) => console.log(error)
-    // );
-    console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    fetch("/api/email", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((data) => data.json())
+      .then((data) => {
+        if (data.response.accepted.length === 1) {
+          toast.success("Email Sent");
+        }
+      })
+      .catch(() => {
+        toast.error("Error To Send Message");
+      });
   };
 
   return (
@@ -54,6 +64,18 @@ export default function ContactForm() {
               placeholder="Full Name"
               className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-slate-300 focus:shadow-md"
               {...register("fullName")}
+            />
+          </div>
+          <div className="mb-5">
+            <label className="mb-3 block text-base font-medium text-[#07074D]">
+              Phone
+            </label>
+            <input
+              type="number"
+              id="phone"
+              placeholder="1234465789"
+              className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-slate-300 focus:shadow-md"
+              {...register("phone")}
             />
           </div>
           <div className="mb-5">

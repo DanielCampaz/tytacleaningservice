@@ -4,7 +4,8 @@ const nextConfig = {
     unoptimized: true,
   },
   publicRuntimeConfig: {
-    EMAIL_EXAMPLE: process.env.EMAIL_EXAMPLE,
+    EMAIL_NODEMAILER: process.env.EMAIL_NODEMAILER,
+    PASSWORD_NODEMAILER: process.env.PASSWORD_NODEMAILER,
   },
 };
 

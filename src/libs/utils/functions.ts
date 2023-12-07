@@ -43,3 +43,7 @@ export const TextShortener = (texto: string, longitudMaxima: number = 100) => {
     return texto;
   }
 };
+
+export const getUrlPath = () => {
+  return "www.tytaservicecleaning.com";
+};
